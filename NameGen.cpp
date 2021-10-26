@@ -20,7 +20,7 @@ int main ()
 {
     #pragma region load adjectives.txt
     fstream adjFile;
-    adjFile.open("adjectives.txt",ios::in);
+    adjFile.open("Resources/adjectives.txt",ios::in);
     if (adjFile.is_open() )
     {
         string line;
@@ -40,7 +40,7 @@ int main ()
 
     #pragma region load nouns.txt
     fstream nounFile;
-    nounFile.open("nouns.txt",ios::in);
+    nounFile.open("Resources/nouns.txt",ios::in);
     if (nounFile.is_open())
     {
         string line;
@@ -60,7 +60,7 @@ int main ()
 
     #pragma region load verbs.txt
     fstream verbFile;
-    verbFile.open("verbs.txt",ios::in);
+    verbFile.open("Resources/verbs.txt",ios::in);
     if (verbFile.is_open() )
     {
         string line;
@@ -80,7 +80,7 @@ int main ()
 
     #pragma region load adverbs.txt
     fstream adverFile;
-    adverFile.open("adverbs.txt",ios::in);
+    adverFile.open("Resources/adverbs.txt",ios::in);
     if (adverFile.is_open() )
     {
         string line;
