@@ -13,7 +13,7 @@ void startLoop();
 string newUName();
 void helpOutput(bool error = false);
 
-#define MAXLENGTH 20
+#define MAXLENGTH 30
 
 vector<string> adjs;
 vector<string> nouns;
@@ -106,9 +106,7 @@ int main ()
 void startLoop()
 {
     string newInput;
-    short running = 1;
-    while (running)
-    for (int i=0; i<2; i++)
+    while (1)
     {
         cout << "NameGen: ";
         cin >> newInput;
@@ -127,7 +125,7 @@ void startLoop()
 
         else if (newInput == "exit")
         {
-            running = 0;
+            break;
         }
         else
         {
@@ -139,8 +137,10 @@ void startLoop()
 
 string newUName()
 {
-    //switch (rand() % 3 + 1)
-    string username = "";
+    string username = "", one = "", two = "";
+    //srand(time(NULL));
+    //short ran = rand() % 3 + 1;
+    //cout << "ran: " << ran << endl;
     switch (1)
     {
         case 1:
@@ -148,7 +148,6 @@ string newUName()
         //if the username is too small or too long, well keep going.
         while (username.length() < 3 || username.length() > MAXLENGTH )
         {
-            string one, two;
             do
             {
                 srand(time(NULL));
@@ -162,82 +161,54 @@ string newUName()
                 two = nouns[(rand() % (nouns.size() - 1))];
             }
             while (two.length() < 3);
-            
-            username = one + two;
         }
         break;
-        /*case 2:
+
+        case 2:
+        //Verbs + Noun
+        //if the username is too small or too long, well keep going.
+        while (username.length() < 3  || username.length() > MAXLENGTH )
         {
-            //Verbs + Noun
-            //if the username is too small or too long, well keep going.
-            while (username == "" || username.Length < 3  || username.Length > 10 )
+            do
             {
-                string one = verbs[ran.Next(0, verbs.Length - 1)];
-                while (one == "" || one == " ") one = verbs[ran.Next(0, verbs.Length - 1)];
-                string two = nouns[ran.Next(0, nouns.Length - 1)];
-                while (two == "" || two == " ") two = nouns[ran.Next(0, nouns.Length - 1)];
-                //Pretty self-explanatory <3
-                one = one.ToLower();
-                two = two.ToLower();
-                if (upperCase)
-                {
-                    char o = one.Substring(0, 1).ToCharArray()[0];
-                    char t = two.Substring(0, 1).ToCharArray()[0];
-                    one = one.Remove(0, 1);
-                    one = o.ToString().ToUpper() + one;
-                    two = two.Remove(0, 1);
-                    two = t.ToString().ToUpper() + two;
-                }
-                if (!allinOne)
-                {
-                    username = one + " " + two;
-                }
-                else
-                {
-                    username = one + two;
-                }
+                srand(time(NULL));
+                one = verbs[(rand() % (verbs.size() - 1))];
             }
-            //we found it! lets get out of this mess.
-            break;
+            while (one.length() < 3);
+
+            do
+            {
+                srand(time(NULL));
+                two = nouns[(rand() % (nouns.size() - 1))];
+            }
+            while (two.length() < 3);
         }
+        break;
+
         case 3:
+        //Adverb + Noun
+        //if the username is too small or too long, well keep going.
+        while (username.length() < 3 || username.length() > MAXLENGTH)
         {
-            //Adverb + Noun
-            //if the username is too small or too long, well keep going.
-            while (username == "" || username.Length < 3 || username.Length > 10)
+            do
             {
-                string one = adverbs[ran.Next(0, adverbs.Length - 1)];
-                while (one == "" || one == " ") one = adverbs[ran.Next(0, adverbs.Length - 1)];
-                string two = nouns[ran.Next(0, nouns.Length - 1)];
-                while (two == "" || two == " ") two = nouns[ran.Next(0, nouns.Length - 1)];
-                //Pretty self-explanatory <3
-                one = one.ToLower();
-                two = two.ToLower();
-                if (upperCase)
-                {
-                    char o = one.Substring(0, 1).ToCharArray()[0];
-                    char t = two.Substring(0, 1).ToCharArray()[0];
-                    one = one.Remove(0, 1);
-                    one = o.ToString().ToUpper() + one;
-                    two = two.Remove(0, 1);
-                    two = t.ToString().ToUpper() + two;
-                }
-                if (!allinOne)
-                {
-                    username = one + " " + two;
-                }
-                else
-                {
-                    username = one + two;
-                }
+                srand(time(NULL));
+                one = adverbs[(rand() % (adverbs.size() - 1))];
             }
-            
-            //we found it! lets get out of this mess.
-            break;
-        }*/
-            
+            while (one.length() < 3);
+
+            do
+            {
+                srand(time(NULL));
+                two = nouns[(rand() % (nouns.size() - 1))];
+            }
+            while (two.length() < 3);
+        }
+        break;
 
     }
+
+    username = one + two;
 
     return username;
 }
