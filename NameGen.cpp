@@ -5,14 +5,15 @@
 #include <vector>
 #include <stdlib.h>
 #include <cstdlib>
+#include <cctype>
 #include <time.h>
+#include <algorithm>
 
 using namespace std;
 
 void startLoop();
 string newUName();
-string calcName(string part1, string part2);
-void helpOutput(bool error = false);
+void helpOutput(bool = false);
 
 #define MAXLENGTH 20
 
@@ -20,6 +21,8 @@ vector<string> adjs;
 vector<string> nouns;
 vector<string> verbs;
 vector<string> adverbs;
+
+short nameState;
 
 int main ()
 {
@@ -111,17 +114,56 @@ void startLoop()
     {
         cout << "NameGen: ";
         cin >> newInput;
+
+        int repeatCount = -1;
+
+        for (int i = 0; i < newInput.length(); i++)
+        {
+            if (isdigit(newInput[i]))
+            {
+                int multi = 1;
+                for (int j = newInput.length(); j>=i; j--)
+                {
+                    try
+                    {
+                        if (isdigit(newInput[j]))
+                        {
+                            repeatCount += (newInput[j] - '0')*multi;
+                            multi *= 10;
+                        }
+                    }
+                    catch (exception) {}
+                }
+                if (repeatCount < 1)
+                {
+                    cout << "This is not a valid number!\n";
+                    newInput.clear();
+                    newInput = "help";
+                    return;
+                }
+                newInput.erase(i);
+                break;
+            }
+        }
+        cout << "'" << newInput << "'" << endl;
         if (newInput == "help")
         {
             helpOutput();
         }
         else if (newInput == "new")
         {
-            cout << newUName() << endl;
+            nameState = 0;
+            cout << newUName() << "\n";
         }
-        else if (newInput == "newLower")
+        else if (newInput == "newLower" || newInput == "newlower")
         {
-            cout << newUName() << endl; //!!!
+            nameState = 1;
+            cout << newUName() << "\n";
+        }
+        else if (newInput == "newUpper" || newInput == "newupper")
+        {
+            nameState = 2;
+            cout << newUName() << "\n";
         }
 
         else if (newInput == "exit")
@@ -132,7 +174,7 @@ void startLoop()
         {
             helpOutput(true);
         }
-        cout << endl;
+        cout << "\n";
     }
 }
 
@@ -161,7 +203,7 @@ string newUName()
             }
             while (two.length() < 3);
             
-            username = calcName(one, two);
+            username = one + two;
         }
         break;
 
@@ -184,7 +226,7 @@ string newUName()
             }
             while (two.length() < 3);
             
-            username = calcName(one, two);
+            username = one + two;
         }
         break;
 
@@ -207,21 +249,33 @@ string newUName()
             }
             while (two.length() < 3);
 
-            username = calcName(one, two);
+            username = one + two;
         }
         break;
 
     }
 
-    return username;
-}
+    switch (nameState)
+    {
+        case 0: //first Letters to upper Chars
+            one[0] = toupper(one[0]);
+            two[0] = toupper(two[0]);
+            break;
+        case 1: //lower
+            one[0] = tolower(one[0]);
+            two[0] = tolower(two[0]);
+            break;
+        case 2: //complete upper Chars
+            for (int i = 0; i < one.length()-1; i++)
+                one[i] = toupper(one[i]);
+            for (int i = 0; i < two.length()-1; i++)
+                two[i] = toupper(two[i]);
+            break;
+        default:
+            break;
+    }
 
-string calcName(string part1, string part2)
-{
-    //!!! upper, lower, ...
-
-
-    return part1 + part2;
+    return one + two;
 }
 
 
@@ -229,12 +283,13 @@ void helpOutput(bool error)
 {
     if (error)
     {
-        cout << "This is not a known command!" << endl;
+        cout << "This is not a known command!\n";
     }
-    cout << "\n" << "Known commands:" << endl;
-    cout << "help : Show this output" << endl;
-    cout << "new : Create new random username" << endl;
-    cout << "newLower : Create new lowercase Username" << endl;
-    cout << "exit : Exit the program" << endl;
+    cout << "\n" << "Known commands:\n";
+    cout << "help \t\tShow this output\n";
+    cout << "new \t\tCreate new random username\n";
+    cout << "newLower \tCreate new lowercase Username\n";
+    cout << "newUpper \tCreate new uppercase Username\n";
+    cout << "exit \t\tExit the program\n";
 }
 
