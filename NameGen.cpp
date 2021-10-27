@@ -4,12 +4,16 @@
 #include <fstream>
 #include <vector>
 #include <stdlib.h>
+#include <cstdlib>
+#include <time.h>
 
 using namespace std;
 
 void startLoop();
 string newUName();
 void helpOutput(bool error = false);
+
+#define MAXLENGTH 20
 
 vector<string> adjs;
 vector<string> nouns;
@@ -28,7 +32,6 @@ int main ()
         {
             adjs.push_back(line);
         }
-        
     }
     else
     {
@@ -46,9 +49,8 @@ int main ()
         string line;
         while(getline(nounFile, line))
         {
-            adjs.push_back(line);
+            nouns.push_back(line);
         }
-        
     }
     else
     {
@@ -66,9 +68,8 @@ int main ()
         string line;
         while(getline(verbFile, line))
         {
-            adjs.push_back(line);
+            verbs.push_back(line);
         }
-        
     }
     else
     {
@@ -86,9 +87,8 @@ int main ()
         string line;
         while(getline(adverFile, line))
         {
-            adjs.push_back(line);
+            adverbs.push_back(line);
         }
-        
     }
     else
     {
@@ -106,7 +106,9 @@ int main ()
 void startLoop()
 {
     string newInput;
-    while (true)
+    short running = 1;
+    while (running)
+    for (int i=0; i<2; i++)
     {
         cout << "NameGen: ";
         cin >> newInput;
@@ -120,12 +122,12 @@ void startLoop()
         }
         else if (newInput == "newLower")
         {
-            cout << newUName() << endl;
+            cout << newUName() << endl; //!!!
         }
 
         else if (newInput == "exit")
         {
-            break;
+            running = 0;
         }
         else
         {
@@ -144,17 +146,24 @@ string newUName()
         case 1:
         //Adjetive + Noun
         //if the username is too small or too long, well keep going.
-        while (username.length() < 3 || username.length() > 15 )
+        while (username.length() < 3 || username.length() > MAXLENGTH )
         {
-            string one = adjs[rand() % (adjs.size() - 1)];
-            cout << "one: " << one << endl;
-            //while (one == "" || one == " ") one = adjs[rand() % (adjs.size() - 1)];
-            string two = nouns[rand() % (nouns.size() - 1)];
-            cout << "two: " << two << endl;
-            //while (two == "" || two == " ") two = nouns[rand() % (nouns.size() - 1)];
+            string one, two;
+            do
+            {
+                srand(time(NULL));
+                one = adjs[(rand() % (adjs.size() - 1))];
+            }
+            while (one.length() < 3);
+
+            do
+            {
+                srand(time(NULL));
+                two = nouns[(rand() % (nouns.size() - 1))];
+            }
+            while (two.length() < 3);
             
             username = one + two;
-            cout << one << " | " << two << " | " << username << endl; //!!!
         }
         break;
         /*case 2:
@@ -230,7 +239,7 @@ string newUName()
 
     }
 
-    return "username";
+    return username;
 }
 
 
