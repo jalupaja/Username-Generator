@@ -11,9 +11,10 @@ using namespace std;
 
 void startLoop();
 string newUName();
+string calcName(string part1, string part2);
 void helpOutput(bool error = false);
 
-#define MAXLENGTH 30
+#define MAXLENGTH 20
 
 vector<string> adjs;
 vector<string> nouns;
@@ -131,17 +132,15 @@ void startLoop()
         {
             helpOutput(true);
         }
-        cout << "" << endl;
+        cout << endl;
     }
 }
 
 string newUName()
 {
     string username = "", one = "", two = "";
-    //srand(time(NULL));
-    //short ran = rand() % 3 + 1;
-    //cout << "ran: " << ran << endl;
-    switch (1)
+    srand(time(NULL));
+    switch (rand() % 3 + 1)
     {
         case 1:
         //Adjetive + Noun
@@ -161,6 +160,8 @@ string newUName()
                 two = nouns[(rand() % (nouns.size() - 1))];
             }
             while (two.length() < 3);
+            
+            username = calcName(one, two);
         }
         break;
 
@@ -182,6 +183,8 @@ string newUName()
                 two = nouns[(rand() % (nouns.size() - 1))];
             }
             while (two.length() < 3);
+            
+            username = calcName(one, two);
         }
         break;
 
@@ -203,16 +206,23 @@ string newUName()
                 two = nouns[(rand() % (nouns.size() - 1))];
             }
             while (two.length() < 3);
+
+            username = calcName(one, two);
         }
         break;
 
     }
 
-    username = one + two;
-
     return username;
 }
 
+string calcName(string part1, string part2)
+{
+    //!!! upper, lower, ...
+
+
+    return part1 + part2;
+}
 
 
 void helpOutput(bool error)
