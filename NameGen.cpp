@@ -11,9 +11,9 @@
 
 using namespace std;
 
-void startLoop();
-string newUName();
-void helpOutput(bool = false);
+void inputLoop();
+string newUName(short);
+void helpOutput();
 
 #define MAXLENGTH 20
 
@@ -21,8 +21,6 @@ vector<string> adjs;
 vector<string> nouns;
 vector<string> verbs;
 vector<string> adverbs;
-
-short nameState;
 
 int main ()
 {
@@ -102,12 +100,12 @@ int main ()
     adverFile.close();
     #pragma endregion
 
-    startLoop();
+    inputLoop();
 
     return EXIT_SUCCESS;
 }
 
-void startLoop()
+void inputLoop()
 {
     string newInput;
     while (1)
@@ -115,12 +113,13 @@ void startLoop()
         cout << "NameGen: ";
         cin >> newInput;
 
-        int repeatCount = -1;
+        int repeatCount = 1;
 
         for (int i = 0; i < newInput.length(); i++)
         {
             if (isdigit(newInput[i]))
             {
+                repeatCount = 0;
                 int multi = 1;
                 for (int j = newInput.length(); j>=i; j--)
                 {
@@ -136,49 +135,46 @@ void startLoop()
                 }
                 if (repeatCount < 1)
                 {
-                    cout << "This is not a valid number!\n";
-                    newInput.clear();
-                    newInput = "help";
-                    return;
+                    cout << repeatCount << " is not a valid number!\n";
+                    repeatCount = 1;
                 }
                 newInput.erase(i);
-                break;
             }
         }
-        cout << "'" << newInput << "'" << endl;
+
         if (newInput == "help")
         {
             helpOutput();
         }
         else if (newInput == "new")
         {
-            nameState = 0;
-            cout << newUName() << "\n";
+            for (int i = 0; i < repeatCount; i++)
+                cout << newUName(0) << "\n";
         }
         else if (newInput == "newLower" || newInput == "newlower")
         {
-            nameState = 1;
-            cout << newUName() << "\n";
+            for (int i = 0; i < repeatCount; i++)
+                cout << newUName(1) << "\n";
         }
         else if (newInput == "newUpper" || newInput == "newupper")
         {
-            nameState = 2;
-            cout << newUName() << "\n";
+            for (int i = 0; i < repeatCount; i++)
+                cout << newUName(2) << "\n";
         }
-
         else if (newInput == "exit")
         {
             break;
         }
         else
         {
-            helpOutput(true);
+            cout << "This is not a known command!\n";
+            helpOutput();
         }
         cout << "\n";
     }
 }
 
-string newUName()
+string newUName(short nameState)
 {
     string username = "", one = "", two = "";
     srand(time(NULL));
@@ -266,9 +262,9 @@ string newUName()
             two[0] = tolower(two[0]);
             break;
         case 2: //complete upper Chars
-            for (int i = 0; i < one.length()-1; i++)
+            for (int i = 0; i < one.length(); i++)
                 one[i] = toupper(one[i]);
-            for (int i = 0; i < two.length()-1; i++)
+            for (int i = 0; i < two.length(); i++)
                 two[i] = toupper(two[i]);
             break;
         default:
@@ -278,13 +274,8 @@ string newUName()
     return one + two;
 }
 
-
-void helpOutput(bool error)
+void helpOutput()
 {
-    if (error)
-    {
-        cout << "This is not a known command!\n";
-    }
     cout << "\n" << "Known commands:\n";
     cout << "help \t\tShow this output\n";
     cout << "new \t\tCreate new random username\n";
