@@ -13,6 +13,7 @@ using namespace std;
 
 void inputLoop();
 string newUName(short);
+string newPass(int);
 void helpOutput();
 
 #define MAXLENGTH 20
@@ -100,6 +101,8 @@ int main ()
     adverFile.close();
     #pragma endregion
 
+    srand((unsigned)time(NULL));
+
     inputLoop();
 
     return EXIT_SUCCESS;
@@ -161,6 +164,10 @@ void inputLoop()
             for (int i = 0; i < repeatCount; i++)
                 cout << newUName(2) << "\n";
         }
+        else if (newInput == "pass")
+        {
+            cout << newPass(repeatCount) << "\n";
+        }
         else if (newInput == "exit")
         {
             break;
@@ -177,7 +184,6 @@ void inputLoop()
 string newUName(short nameState)
 {
     string username = "", one = "", two = "";
-    srand(time(NULL));
     switch (rand() % 3 + 1)
     {
         case 1:
@@ -187,14 +193,12 @@ string newUName(short nameState)
         {
             do
             {
-                srand(time(NULL));
                 one = adjs[(rand() % (adjs.size() - 1))];
             }
             while (one.length() < 3);
 
             do
             {
-                srand(time(NULL));
                 two = nouns[(rand() % (nouns.size() - 1))];
             }
             while (two.length() < 3);
@@ -210,14 +214,12 @@ string newUName(short nameState)
         {
             do
             {
-                srand(time(NULL));
                 one = verbs[(rand() % (verbs.size() - 1))];
             }
             while (one.length() < 3);
 
             do
             {
-                srand(time(NULL));
                 two = nouns[(rand() % (nouns.size() - 1))];
             }
             while (two.length() < 3);
@@ -233,14 +235,12 @@ string newUName(short nameState)
         {
             do
             {
-                srand(time(NULL));
                 one = adverbs[(rand() % (adverbs.size() - 1))];
             }
             while (one.length() < 3);
 
             do
             {
-                srand(time(NULL));
                 two = nouns[(rand() % (nouns.size() - 1))];
             }
             while (two.length() < 3);
@@ -274,6 +274,18 @@ string newUName(short nameState)
     return one + two;
 }
 
+string newPass(int len)
+{
+    const string alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+    string output;
+    if (len == 1) len = 20;
+    for (int i = 0; i < len; i++)
+    {
+        output += alphabet[rand() % (alphabet.length())];
+    }
+    return output;
+}
+
 void helpOutput()
 {
     cout << "\n" << "Known commands:\n";
@@ -281,6 +293,7 @@ void helpOutput()
     cout << "new \t\tCreate new random username\n";
     cout << "newLower \tCreate new lowercase Username\n";
     cout << "newUpper \tCreate new uppercase Username\n";
+    cout << "pass20 \t\tCreate new password with length 20\n";
     cout << "exit \t\tExit the program\n";
 }
 
