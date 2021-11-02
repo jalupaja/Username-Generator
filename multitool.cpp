@@ -26,6 +26,7 @@ vector<string> nouns;
 vector<string> verbs;
 vector<string> adverbs;
 
+const string LISTPATH = "Resources/";
 
 int main (int argc, char *argv[])
 {
@@ -267,7 +268,7 @@ int setupName()
 {
     #pragma region load adjectives.txt
     fstream adjFile;
-    adjFile.open("Resources/adjectives.txt",ios::in);
+    adjFile.open(LISTPATH + "adjectives.txt",ios::in);
     if (adjFile.is_open() )
     {
         string line;
@@ -286,7 +287,7 @@ int setupName()
 
     #pragma region load nouns.txt
     fstream nounFile;
-    nounFile.open("Resources/nouns.txt",ios::in);
+    nounFile.open(LISTPATH + "nouns.txt",ios::in);
     if (nounFile.is_open())
     {
         string line;
@@ -305,7 +306,7 @@ int setupName()
 
     #pragma region load verbs.txt
     fstream verbFile;
-    verbFile.open("Resources/verbs.txt",ios::in);
+    verbFile.open(LISTPATH + "verbs.txt",ios::in);
     if (verbFile.is_open() )
     {
         string line;
@@ -324,7 +325,7 @@ int setupName()
 
     #pragma region load adverbs.txt
     fstream adverFile;
-    adverFile.open("Resources/adverbs.txt",ios::in);
+    adverFile.open(LISTPATH + "adverbs.txt",ios::in);
     if (adverFile.is_open() )
     {
         string line;
