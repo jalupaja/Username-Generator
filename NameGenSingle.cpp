@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <iostream>
 #include <cstring>
 #include <vector>
 #include <stdlib.h>
 #include <cstdlib>
 #include <cctype>
+#include <fstream>
 #include <time.h>
 #include <algorithm>
 #include <thread>
@@ -15,22 +17,19 @@ void inputLoop();
 string newUName(short);
 string newPass(int);
 void helpOutput();
+int setupFiles();
 int string2Num(string);
-
 
 #define MAXLENGTH 20
 
-#pragma region vectors
-vector<string> adjs;
-vector<string> nouns;
-vector<string> adverbs;
-vector<string> verbs;
-#pragma endregion
+vector<string> adjs, advs, nouns, verbs;
+
+static const string FOLDER = "Resources/";
 
 int main(int argc, char *argv[])
 {
-    srand((long long)std::hash<std::thread::id>()(std::this_thread::get_id()));
-
+    srand((uintmax_t)std::hash<std::thread::id>()(std::this_thread::get_id()));
+    srand(unsigned(time(0)));
     int repeatCounter = 1;
     if (argc == 1)
     {
@@ -38,6 +37,8 @@ int main(int argc, char *argv[])
     }
     else if (!strcmp(argv[1], "new"))
     {
+        if (setupFiles() == EXIT_FAILURE)
+            return EXIT_FAILURE;
         if (argc > 2)
             repeatCounter = string2Num(argv[2]);
         if (repeatCounter < 1) repeatCounter = 1;
@@ -46,6 +47,8 @@ int main(int argc, char *argv[])
     }
     else if (!strcmp(argv[1], "newLower") || !strcmp(argv[1], "newlower"))
     {
+        if (setupFiles() == EXIT_FAILURE)
+            return EXIT_FAILURE;
         if (argc > 2)
             repeatCounter = string2Num(argv[2]);
         if (repeatCounter < 1) repeatCounter = 1;
@@ -54,6 +57,8 @@ int main(int argc, char *argv[])
     }
     else if (!strcmp(argv[1], "newUpper") || !strcmp(argv[1], "newupper"))
     {
+        if (setupFiles() == EXIT_FAILURE)
+            return EXIT_FAILURE;
         if (argc > 2)
             repeatCounter = string2Num(argv[2]);
         if (repeatCounter < 1) repeatCounter = 1;
@@ -134,7 +139,7 @@ string newUName(short nameState)
         {
             do
             {
-                one = adverbs[(rand() % (adverbs.size() - 1))];
+                one = advs[(rand() % (advs.size() - 1))];
             }
             while (one.length() < 3);
 
@@ -169,8 +174,8 @@ string newUName(short nameState)
         default:
             break;
     }
-
-    return one + two;
+    cout << "adj:" << adjs[(adjs.size() - 1)] << "\nadv:" << advs[(advs.size() - 1)] << "\nverbs:" << verbs[(verbs.size() - 1)] << "\nnouns:" << nouns[(nouns.size() - 1)] << "\n";
+    return "1" + one + "2" + two;
 }
 
 string newPass(int len)
@@ -194,6 +199,87 @@ void helpOutput()
     cout << "newUpper \tCreate new uppercase Username\n";
     cout << "pass20 \t\tCreate new password with length 20\n";
     cout << "exit \t\tExit the program\n";
+}
+
+int setupFiles()
+{ 
+    #pragma region load adjectives.txt
+    fstream adjFile;
+    adjFile.open(FOLDER + "adjectives.txt",ios::in);
+    if (adjFile.is_open() )
+    {
+        string line;
+        while(getline(adjFile, line))
+        {
+            adjs.push_back(line);
+        }
+    }
+    else
+    {
+        cout << "You are missing the adjectives.txt file";
+        return EXIT_FAILURE;
+    }
+    adjFile.close();
+    #pragma endregion
+
+    #pragma region load nouns.txt
+    fstream nounFile;
+    nounFile.open(FOLDER + "nouns.txt",ios::in);
+    if (nounFile.is_open())
+    {
+        string line;
+        while(getline(nounFile, line))
+        {
+            nouns.push_back(line);
+        }
+    }
+    else
+    {
+        cout << "You are missing the nouns.txt file";
+        return EXIT_FAILURE;
+    }
+    nounFile.close();
+    #pragma endregion
+
+    #pragma region load verbs.txt
+    fstream verbFile;
+    verbFile.open(FOLDER + "verbs.txt",ios::in);
+    if (verbFile.is_open() )
+    {
+        string line;
+        while(getline(verbFile, line))
+        {
+            verbs.push_back(line);
+        }
+    }
+    else
+    {
+        cout << "You are missing the verbs.txt file";
+        return EXIT_FAILURE;
+    }
+    verbFile.close();
+    #pragma endregion
+
+    #pragma region load adverbs.txt
+    fstream adverFile;
+    adverFile.open(FOLDER + "adverbs.txt",ios::in);
+    if (adverFile.is_open() )
+    {
+        string line;
+        while(getline(adverFile, line))
+        {
+            advs.push_back(line);
+        }
+    }
+    else
+    {
+        cout << "You are missing the adverbs.txt file";
+        return EXIT_FAILURE;
+    }
+    adverFile.close();
+    #pragma endregion
+    
+    return EXIT_SUCCESS;
 }
 
 int string2Num(string input)
