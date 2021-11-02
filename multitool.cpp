@@ -8,12 +8,15 @@
 #include <cctype>
 #include <time.h>
 #include <algorithm>
+#include <thread>
 
 using namespace std;
 
 void inputLoop();
 string newUName(short);
 string newPass(int);
+int setupName();
+int string2Num(string);
 void helpOutput();
 
 #define MAXLENGTH 20
@@ -23,87 +26,61 @@ vector<string> nouns;
 vector<string> verbs;
 vector<string> adverbs;
 
-int main ()
+
+int main (int argc, char *argv[])
 {
-    #pragma region load adjectives.txt
-    fstream adjFile;
-    adjFile.open("Resources/adjectives.txt",ios::in);
-    if (adjFile.is_open() )
+    srand((uintmax_t)std::hash<std::thread::id>()(std::this_thread::get_id()));
+    int repeatCounter = 1;
+    if (argc == 1)
     {
-        string line;
-        while(getline(adjFile, line))
-        {
-            adjs.push_back(line);
-        }
+        helpOutput();
+    }
+    else if (!strcmp(argv[1], "name"))
+    {
+        if (setupName() == EXIT_FAILURE)
+            return EXIT_FAILURE;
+        if (argc > 2)
+            repeatCounter = string2Num(argv[2]);
+        if (repeatCounter < 1) repeatCounter = 1;
+        for (int i = 0; i < repeatCounter; i++)
+            cout << newUName(0) << "\n";
+    }
+    else if (!strcmp(argv[1], "nameLower") || !strcmp(argv[1], "namelower"))
+    {
+        if (setupName() == EXIT_FAILURE)
+            return EXIT_FAILURE;
+        if (argc > 2)
+            repeatCounter = string2Num(argv[2]);
+        if (repeatCounter < 1) repeatCounter = 1;
+        for (int i = 0; i < repeatCounter; i++)
+            cout << newUName(1) << "\n";
+    }
+    else if (!strcmp(argv[1], "nameUpper") || !strcmp(argv[1], "nameupper"))
+    {
+        if (setupName() == EXIT_FAILURE)
+            return EXIT_FAILURE;
+        if (argc > 2)
+            repeatCounter = string2Num(argv[2]);
+        if (repeatCounter < 1) repeatCounter = 1;
+        for (int i = 0; i < repeatCounter; i++)
+            cout << newUName(2) << "\n";
+    }
+    else if (!strcmp(argv[1], "pass"))
+    {
+        int length = 20;
+        if (argc > 2)
+            length = string2Num(argv[2]);
+        if (length < 1) length = 1;
+        if (argc > 3)
+            repeatCounter = string2Num(argv[3]);
+        if (repeatCounter < 1) repeatCounter = 1;
+        for (int i = 0; i < repeatCounter; i++)
+            cout << newPass(length) << "\n";
     }
     else
     {
-        cout << "You are missing the adjectives.txt file";
-        return EXIT_FAILURE;
+        helpOutput();
     }
-    adjFile.close();
-    #pragma endregion
-
-    #pragma region load nouns.txt
-    fstream nounFile;
-    nounFile.open("Resources/nouns.txt",ios::in);
-    if (nounFile.is_open())
-    {
-        string line;
-        while(getline(nounFile, line))
-        {
-            nouns.push_back(line);
-        }
-    }
-    else
-    {
-        cout << "You are missing the nouns.txt file";
-        return EXIT_FAILURE;
-    }
-    nounFile.close();
-    #pragma endregion
-
-    #pragma region load verbs.txt
-    fstream verbFile;
-    verbFile.open("Resources/verbs.txt",ios::in);
-    if (verbFile.is_open() )
-    {
-        string line;
-        while(getline(verbFile, line))
-        {
-            verbs.push_back(line);
-        }
-    }
-    else
-    {
-        cout << "You are missing the verbs.txt file";
-        return EXIT_FAILURE;
-    }
-    verbFile.close();
-    #pragma endregion
-
-    #pragma region load adverbs.txt
-    fstream adverFile;
-    adverFile.open("Resources/adverbs.txt",ios::in);
-    if (adverFile.is_open() )
-    {
-        string line;
-        while(getline(adverFile, line))
-        {
-            adverbs.push_back(line);
-        }
-    }
-    else
-    {
-        cout << "You are missing the adverbs.txt file";
-        return EXIT_FAILURE;
-    }
-    adverFile.close();
-    #pragma endregion
-
-    srand((unsigned)time(NULL));
-
-    inputLoop();
 
     return EXIT_SUCCESS;
 }
@@ -284,6 +261,105 @@ string newPass(int len)
         output += alphabet[rand() % (alphabet.length())];
     }
     return output;
+}
+
+int setupName()
+{
+    #pragma region load adjectives.txt
+    fstream adjFile;
+    adjFile.open("Resources/adjectives.txt",ios::in);
+    if (adjFile.is_open() )
+    {
+        string line;
+        while(getline(adjFile, line))
+        {
+            adjs.push_back(line);
+        }
+    }
+    else
+    {
+        cout << "You are missing the adjectives.txt file";
+        return EXIT_FAILURE;
+    }
+    adjFile.close();
+    #pragma endregion
+
+    #pragma region load nouns.txt
+    fstream nounFile;
+    nounFile.open("Resources/nouns.txt",ios::in);
+    if (nounFile.is_open())
+    {
+        string line;
+        while(getline(nounFile, line))
+        {
+            nouns.push_back(line);
+        }
+    }
+    else
+    {
+        cout << "You are missing the nouns.txt file";
+        return EXIT_FAILURE;
+    }
+    nounFile.close();
+    #pragma endregion
+
+    #pragma region load verbs.txt
+    fstream verbFile;
+    verbFile.open("Resources/verbs.txt",ios::in);
+    if (verbFile.is_open() )
+    {
+        string line;
+        while(getline(verbFile, line))
+        {
+            verbs.push_back(line);
+        }
+    }
+    else
+    {
+        cout << "You are missing the verbs.txt file";
+        return EXIT_FAILURE;
+    }
+    verbFile.close();
+    #pragma endregion
+
+    #pragma region load adverbs.txt
+    fstream adverFile;
+    adverFile.open("Resources/adverbs.txt",ios::in);
+    if (adverFile.is_open() )
+    {
+        string line;
+        while(getline(adverFile, line))
+        {
+            adverbs.push_back(line);
+        }
+    }
+    else
+    {
+        cout << "You are missing the adverbs.txt file";
+        return EXIT_FAILURE;
+    }
+    adverFile.close();
+    #pragma endregion
+    return EXIT_SUCCESS;
+}
+
+int string2Num(string input)
+{
+    int ret = 0;
+    int multi = 1;
+    for (int j = input.length(); j>=0; j--)
+    {
+        try
+        {
+            if (isdigit(input[j]))
+            {
+                ret += (input[j] - '0')*multi;
+                multi *= 10;
+            }
+        }
+        catch (exception) {}
+    }
+    return ret;
 }
 
 void helpOutput()
