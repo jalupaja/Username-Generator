@@ -248,7 +248,7 @@ string newUName(short nameState)
             break;
     }
 
-    return "1" + one + "2" + two;
+    return one + two;
 }
 
 string newPass(int len)
@@ -364,12 +364,12 @@ int string2Num(string input)
 
 void helpOutput()
 {
-    cout << "\n" << "Known commands:\n";
-    cout << "help \t\tShow this output\n";
-    cout << "new \t\tCreate new random username\n";
-    cout << "newLower \tCreate new lowercase Username\n";
-    cout << "newUpper \tCreate new uppercase Username\n";
-    cout << "pass20 \t\tCreate new password with length 20\n";
+    cout << "Known commands:\n";
+    cout << "help\t\tShow this output\n";
+    cout << "name x\t\tCreate new x new random usernames\n";
+    cout << "nameLower x\tCreate x new lowercase usernames\n";
+    cout << "nameUpper x\tCreate x new uppercase usernames\n";
+    cout << "pass l x\t\tCreate x new passwords with the length l\n";
     cout << "exit \t\tExit the program\n";
 }
 
