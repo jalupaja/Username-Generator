@@ -21,10 +21,8 @@ void helpOutput();
 
 #define MAXLENGTH 20
 
-vector<string> adjs;
-vector<string> nouns;
-vector<string> verbs;
-vector<string> adverbs;
+vector<string> firstWord;
+vector<string> secondWord;
 
 const string LISTPATH = "Resources/";
 
@@ -42,7 +40,7 @@ int main (int argc, char *argv[])
             return EXIT_FAILURE;
         if (argc > 2)
             repeatCounter = string2Num(argv[2]);
-        if (repeatCounter < 1) repeatCounter = 1;
+        if (repeatCounter < 0) repeatCounter = 1;
         for (int i = 0; i < repeatCounter; i++)
             cout << newUName(0) << "\n";
     }
@@ -52,7 +50,7 @@ int main (int argc, char *argv[])
             return EXIT_FAILURE;
         if (argc > 2)
             repeatCounter = string2Num(argv[2]);
-        if (repeatCounter < 1) repeatCounter = 1;
+        if (repeatCounter < 0) repeatCounter = 1;
         for (int i = 0; i < repeatCounter; i++)
             cout << newUName(1) << "\n";
     }
@@ -62,7 +60,7 @@ int main (int argc, char *argv[])
             return EXIT_FAILURE;
         if (argc > 2)
             repeatCounter = string2Num(argv[2]);
-        if (repeatCounter < 1) repeatCounter = 1;
+        if (repeatCounter < 0) repeatCounter = 1;
         for (int i = 0; i < repeatCounter; i++)
             cout << newUName(2) << "\n";
     }
@@ -162,71 +160,22 @@ void inputLoop()
 string newUName(short nameState)
 {
     string username = "", one = "", two = "";
-    switch (rand() % 3 + 1)
+
+    while (username.length() < 3 || username.length() > MAXLENGTH )
     {
-        case 1:
-        //Adjetive + Noun
-        //if the username is too small or too long, well keep going.
-        while (username.length() < 3 || username.length() > MAXLENGTH )
+        do
         {
-            do
-            {
-                one = adjs[(rand() % (adjs.size() - 1))];
-            }
-            while (one.length() < 3);
-
-            do
-            {
-                two = nouns[(rand() % (nouns.size() - 1))];
-            }
-            while (two.length() < 3);
-            
-            username = one + two;
+            one = firstWord[(rand() % (firstWord.size() - 1))];
         }
-        break;
+        while (one.length() < 3);
 
-        case 2:
-        //Verbs + Noun
-        //if the username is too small or too long, well keep going.
-        while (username.length() < 3  || username.length() > MAXLENGTH )
+        do
         {
-            do
-            {
-                one = verbs[(rand() % (verbs.size() - 1))];
-            }
-            while (one.length() < 3);
-
-            do
-            {
-                two = nouns[(rand() % (nouns.size() - 1))];
-            }
-            while (two.length() < 3);
-            
-            username = one + two;
+            two = secondWord[(rand() % (secondWord.size() - 1))];
         }
-        break;
-
-        case 3:
-        //Adverb + Noun
-        //if the username is too small or too long, well keep going.
-        while (username.length() < 3 || username.length() > MAXLENGTH)
-        {
-            do
-            {
-                one = adverbs[(rand() % (adverbs.size() - 1))];
-            }
-            while (one.length() < 3);
-
-            do
-            {
-                two = nouns[(rand() % (nouns.size() - 1))];
-            }
-            while (two.length() < 3);
-
-            username = one + two;
-        }
-        break;
-
+        while (two.length() < 3);
+        
+        username = one + two;
     }
 
     switch (nameState)
@@ -266,81 +215,40 @@ string newPass(int len)
 
 int setupName()
 {
-    #pragma region load adjectives.txt
-    fstream adjFile;
-    adjFile.open(LISTPATH + "adjectives.txt",ios::in);
-    if (adjFile.is_open() )
+    #pragma region load firstList.txt
+    fstream firstFile;
+        firstFile.open(LISTPATH + "firstList.txt",ios::in);
+    if (firstFile.is_open() )
     {
         string line;
-        while(getline(adjFile, line))
+        while(getline(firstFile, line))
         {
-            adjs.push_back(line);
+            firstWord.push_back(line);
         }
     }
-    else
-    {
-        cout << "You are missing the adjectives.txt file";
-        return EXIT_FAILURE;
-    }
-    adjFile.close();
+    firstFile.close();
     #pragma endregion
 
-    #pragma region load nouns.txt
-    fstream nounFile;
-    nounFile.open(LISTPATH + "nouns.txt",ios::in);
-    if (nounFile.is_open())
+    #pragma region load secondList.txt
+    fstream secondFile;
+    secondFile.open(LISTPATH + "secondList.txt",ios::in);
+    if (secondFile.is_open())
     {
         string line;
-        while(getline(nounFile, line))
+        while(getline(secondFile, line))
         {
-            nouns.push_back(line);
+            secondWord.push_back(line);
         }
     }
-    else
-    {
-        cout << "You are missing the nouns.txt file";
-        return EXIT_FAILURE;
-    }
-    nounFile.close();
+    secondFile.close();
     #pragma endregion
 
-    #pragma region load verbs.txt
-    fstream verbFile;
-    verbFile.open(LISTPATH + "verbs.txt",ios::in);
-    if (verbFile.is_open() )
+    if (firstWord.size() < 1 || secondWord.size() < 1)
     {
-        string line;
-        while(getline(verbFile, line))
-        {
-            verbs.push_back(line);
-        }
-    }
-    else
-    {
-        cout << "You are missing the verbs.txt file";
+        cout << "You need a longer list in order to continue\n";
         return EXIT_FAILURE;
     }
-    verbFile.close();
-    #pragma endregion
 
-    #pragma region load adverbs.txt
-    fstream adverFile;
-    adverFile.open(LISTPATH + "adverbs.txt",ios::in);
-    if (adverFile.is_open() )
-    {
-        string line;
-        while(getline(adverFile, line))
-        {
-            adverbs.push_back(line);
-        }
-    }
-    else
-    {
-        cout << "You are missing the adverbs.txt file";
-        return EXIT_FAILURE;
-    }
-    adverFile.close();
-    #pragma endregion
     return EXIT_SUCCESS;
 }
 
@@ -367,10 +275,10 @@ void helpOutput()
 {
     cout << "Known commands:\n";
     cout << "help\t\tShow this output\n";
-    cout << "name x\t\tCreate new x new random usernames\n";
-    cout << "nameLower x\tCreate x new lowercase usernames\n";
-    cout << "nameUpper x\tCreate x new uppercase usernames\n";
-    cout << "pass l x\t\tCreate x new passwords with the length l\n";
+    cout << "name [x]\t\tCreate new x new random usernames\n";
+    cout << "nameLower [x]\tCreate x new lowercase usernames\n";
+    cout << "nameUpper [x]\tCreate x new uppercase usernames\n";
+    cout << "pass [l] [x]\t\tCreate x new passwords with the length l\n";
     cout << "exit \t\tExit the program\n";
 }
 
