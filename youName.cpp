@@ -38,7 +38,7 @@ vector<string> secondWord;
 
 const string LISTPATH = "Resources/";
 
-int main (int argc, char *argv[])
+int main (int argc, const char *argv[])
 {
     srand((uintmax_t)std::hash<std::thread::id>()(std::this_thread::get_id()));
     mode = None;
@@ -55,77 +55,100 @@ int main (int argc, char *argv[])
         helpOutput();
         return EXIT_FAILURE;
     }
-
-    for(int i = 1; i < (argc); i++)
+    else if (!strcmp(argv[1], "name"))
     {
-        if (mode == None)
+        mode == Name;
+        if (argc > 1) repeatCounter = string2Num(argv[2]);
+    }
+    else if (!strcmp(argv[1], "nameLower") || !strcmp(argv[1], "namelower"))
+    {
+        mode = NameLower;
+        if (argc > 1) repeatCounter = string2Num(argv[2]);
+    }
+    else if (!strcmp(argv[1], "nameUpper") || !strcmp(argv[1], "nameupper"))
+    {
+        mode = NameUpper;
+        if (argc > 1) repeatCounter = string2Num(argv[2]);
+    }
+    else if (!strcmp(argv[1], "pass"))
+    {
+        mode = Pass;
+        if (argc > 1) maxLength = string2Num(argv[2]);
+        if (argc > 2) repeatCounter = string2Num(argv[3]);
+    }
+    else 
+    {
+        for(int i = 1; i < argc; i++)
         {
-            if (!strcmp(argv[i], "-n") || !strcmp(argv[i], "--name") || !strcmp(argv[i], "--Name"))
+            if (mode == None)
             {
-                mode = Name;
-                continue;
-            }
-            else if (!strcmp(argv[i], "-nL") || !strcmp(argv[i], "-nl") || !strcmp(argv[i], "--namelower") || !strcmp(argv[i], "--nameLower"))
-            {
-                mode = NameLower;
-                continue;
-            }
-            else if (!strcmp(argv[i], "-nU") || !strcmp(argv[i], "-nu") || !strcmp(argv[i], "--nameupper") || !strcmp(argv[i], "--nameUpper"))
-            {
-                mode = NameUpper;
-                continue;
-            } 
-            else if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--pass") || !strcmp(argv[i], "--Pass"))
-            {
-                mode = Pass;
-                continue;
-            }
-        }
-        if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--repeat"))
-        {
-            repeatCounter = string2Num(argv[++i]);
-        }
-        else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--length") || !strcmp(argv[i], "--maxLength") || !strcmp(argv[i], "--maxlength"))
-        {
-            maxLength = string2Num(argv[++i]);
-        }
-        else if (!strcmp(argv[i], "-lM") || !strcmp(argv[i], "-lm") || !strcmp(argv[i], "--minLength") || !strcmp(argv[i], "--minlength"))
-        {
-            minLength = string2Num(argv[++i]);
-        }
-        else if (!strcmp(argv[i], "-pO") || !strcmp(argv[i], "-po") || !strcmp(argv[i], "--passOptions") || !strcmp(argv[i], "--passoptions"))
-        {
-            i++;
-            int j = 0;
-            passLower = false;
-            passUpper = false;
-            passNum = false;
-            passSpec = false;
-
-            while(argv[i][j] != '\0')
-            {
-                if (argv[i][j] == 'a')
-                    passLower = true;
-                else if (argv[i][j] == 'A')
-                    passUpper = true;
-                else if (argv[i][j] == '1')
-                    passNum = true;
-                else if (argv[i][j] == '+')
-                    passSpec = true;
-                else
+                if (!strcmp(argv[i], "-n") || !strcmp(argv[i], "--name") || !strcmp(argv[i], "--Name"))
                 {
-                    cout << "\"" << argv[i-1] << " " << argv[i][j] << "\"" << " is not a valid option!\n";
-                    helpOutput();
-                    return EXIT_FAILURE;
+                    mode = Name;
+                    continue;
                 }
-                j++;
+                else if (!strcmp(argv[i], "-nL") || !strcmp(argv[i], "-nl") || !strcmp(argv[i], "--namelower") || !strcmp(argv[i], "--nameLower"))
+                {
+                    mode = NameLower;
+                    continue;
+                }
+                else if (!strcmp(argv[i], "-nU") || !strcmp(argv[i], "-nu") || !strcmp(argv[i], "--nameupper") || !strcmp(argv[i], "--nameUpper"))
+                {
+                    mode = NameUpper;
+                    continue;
+                } 
+                else if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--pass") || !strcmp(argv[i], "--Pass"))
+                {
+                    mode = Pass;
+                    continue;
+                }
             }
-        }
-        else
-        {
-            cout << "\"" << argv[i] << "\"" << " is not a valid option!\n";
-            helpOutput();
-            return EXIT_FAILURE;
+            if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--repeat"))
+            {
+                repeatCounter = string2Num(argv[++i]);
+            }
+            else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--length") || !strcmp(argv[i], "--maxLength") || !strcmp(argv[i], "--maxlength"))
+            {
+                maxLength = string2Num(argv[++i]);
+            }
+            else if (!strcmp(argv[i], "-lM") || !strcmp(argv[i], "-lm") || !strcmp(argv[i], "--minLength") || !strcmp(argv[i], "--minlength"))
+            {
+                minLength = string2Num(argv[++i]);
+            }
+            else if (!strcmp(argv[i], "-pO") || !strcmp(argv[i], "-po") || !strcmp(argv[i], "--passOptions") || !strcmp(argv[i], "--passoptions"))
+            {
+                i++;
+                int j = 0;
+                passLower = false;
+                passUpper = false;
+                passNum = false;
+                passSpec = false;
+
+                while(argv[i][j] != '\0')
+                {
+                    if (argv[i][j] == 'a')
+                        passLower = true;
+                    else if (argv[i][j] == 'A')
+                        passUpper = true;
+                    else if (argv[i][j] == '1')
+                        passNum = true;
+                    else if (argv[i][j] == '+')
+                        passSpec = true;
+                    else
+                    {
+                        cout << "\"" << argv[i-1] << " " << argv[i][j] << "\"" << " is not a valid option!\n";
+                        helpOutput();
+                        return EXIT_FAILURE;
+                    }
+                    j++;
+                }
+            }
+            else
+            {
+                cout << "\"" << argv[i] << "\"" << " is not a valid option!\n";
+                helpOutput();
+                return EXIT_FAILURE;
+            }
         }
     }
 

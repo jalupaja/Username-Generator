@@ -11,6 +11,12 @@ A username and password generator written in C++
 - -r  | --repeat		Set how many names/passwords you want
 - -l  | --maxLength	Set maximum length for username/password
 - -lm | --minLength	Set minimum length for username
-	
+
+# Shortcut Features:
+- name [r]
+- nameLower [r]
+- nameUpper [r]
+- pass [l] [r]
+
 # Usage:
     youName ( -h | -n | -nL | -nU | -p ) [ -pO [aA1+] -r [x] -l [x] -lM [x] ]
