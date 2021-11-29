@@ -57,7 +57,7 @@ int main (int argc, const char *argv[])
     }
     else if (!strcmp(argv[1], "name"))
     {
-        mode == Name;
+        mode = Name;
         if (argc > 1) repeatCounter = string2Num(argv[2]);
     }
     else if (!strcmp(argv[1], "nameLower") || !strcmp(argv[1], "namelower"))
