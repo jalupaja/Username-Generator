@@ -1,6 +1,8 @@
 # youName
 A username and password generator written in C++
 
+This project has been implemented into [MultiTool](https://github.com/jalupaja/MultiTool) and will be archived!
+
 # Features:
 - -h  | --help		Show this output
 - -n  | --name		Create new random username
